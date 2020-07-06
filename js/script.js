@@ -137,7 +137,14 @@
 // // }
 
 //===============================================================================================================================
-function playGame(argPlayerInput) {
+
+let wygrana_Gracza = 0;
+let wygrana_Komputera = 0;
+let remis = 0;
+let liczbaGier = 0;
+
+function playGame() {
+  //argPlayerInput
   function getMoveName(argMoveId) {
     if (argMoveId == 1) {
       return "kamień";
@@ -155,23 +162,59 @@ function playGame(argPlayerInput) {
       (argComputerMove == "nożyce" && argPlayerMove == "kamień")
     ) {
       printMessage("Ty wygrywasz!");
+      wygrana_Gracza = wygrana_Gracza + 1;
     } else if (argComputerMove == argPlayerMove) {
       printMessage("Jest remis!");
+      remis = remis + 1;
     } else if (playerMove == "nieznany ruch") {
       printMessage("Niedozwolony ruch gracza!");
     } else {
       printMessage("Komputer wygrywa!");
+      wygrana_Komputera = wygrana_Komputera + 1;
     }
 
-    printMessage("Nie znam ruchu o id " + argMoveId + ".");
-    return "nieznany ruch";
+    // printMessage("Nie znam ruchu o id " + argPlayerMove + ".");
+    // return "nieznany ruch";
+
+    printMessage("Wygrane gracza: " + wygrana_Gracza);
+    printMessage("Remisy: " + remis);
+    printMessage("Wygrane komputera: " + wygrana_Komputera);
+
+    if (wygrana_Gracza > wygrana_Komputera) {
+      printMessage("Wygrał GRACZ!!!");
+    } else if (wygrana_Gracza < wygrana_Komputera) {
+      printMessage("Wygrał KOMPUTER!!!");
+    } else {
+      printMessage("Jest REMIS!!!");
+    }
   }
 
   clearMessages();
 
-  let playerInput = argPlayerInput;
+  let playerInput = Math.floor(Math.random() * 3 + 1); //argPlayerInput;
+
+  liczbaGier = liczbaGier + 1;
+
+  //tutaj zrobic sprawdzanie, czy jest porporcja wygranych kompa <= 25% liczbaGier, jesli tak, to losujemy normalnie, jesli nie, to falszujemy
+  console.log(
+    "Liczba gier: " +
+      liczbaGier +
+      " \n " +
+      "Procent wygranych komputera + 1 to: " +
+      (wygrana_Komputera + 1) / liczbaGier
+  );
 
   let randomNumber = Math.floor(Math.random() * 3 + 1);
+
+  if ((wygrana_Komputera + 1) / liczbaGier > 0.25) {
+    if (playerInput == 1) {
+      randomNumber = 3;
+    } else if (playerInput == 2) {
+      randomNumber = 1;
+    } else if (playerInput == 3) {
+      randomNumber = 2;
+    }
+  }
 
   console.log("Wylosowana liczba to: " + randomNumber);
 
@@ -204,3 +247,8 @@ document.getElementById("play-scissors").addEventListener("click", function () {
   playGame(3);
   //   printMessage("guzik 3 klikniety");
 });
+
+for (let i = 0; i <= 10000; i++) {
+  console.log("i-ta iteracja: " + i);
+  playGame();
+}
